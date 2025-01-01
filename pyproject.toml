@@ -4,9 +4,9 @@ requires = ["setuptools >= 68.0"]
 
 [project]
 name = "bitstruct-annotated"
-version = "0.1.1"
-description = "Provides Annotated metadata classes to define a packing/unpacking format strings for bitstruct."
-readme = "README.rst"
+version = "0.1.2"
+description = "Annotate fields with bitstruct un/packing instructions"
+readme = "README.md"
 requires-python = ">=3.10"
 keywords = [
     "bitstruct",
@@ -16,7 +16,7 @@ keywords = [
     "serialization"
 ]
 authors = [
-    { name = "Oliver Kleinke", email = "oliver.kleinke@ok-ss.de" },
+    { name = "Oliver Kleinke", email = "oliver.kleinke@c-01a.de" },
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
