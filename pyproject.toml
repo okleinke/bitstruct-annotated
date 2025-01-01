@@ -31,6 +31,9 @@ dependencies = [
     "bitstruct"
 ]
 
+[project.urls]
+Source = "https://github.com/okleinke/bitstruct-annotated/"
+
 [project.optional-dependencies]
 dev = [
     "black",
