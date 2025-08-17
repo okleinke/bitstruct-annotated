@@ -1,27 +1,23 @@
-.PHONY: test coverage lint format build
+.PHONY: test coverage lint format build install
 
 install:
-	pip install -e .[lint,dev,test]
+	pip install -e .[dev]
 
 test:
-	python -m unittest discover -v -s tests
+	pytest -q
 
 coverage:
-# Exclude the tests directory from coverage
-	coverage run --source=src -m unittest discover -v -s tests
-	coverage report -m
+	pytest --cov=src/bitstruct_annotated --cov-report=term-missing --cov-report=xml:coverage.xml --cov-fail-under=80
 
 lint:
 	ruff check src
 	mypy src
 	validate-pyproject pyproject.toml
-	vulture src
-
+	vulture src --min-confidence 80
 
 format:
 	isort src tests
 	black src tests
-
 
 build:
 	python -m build

@@ -26,10 +26,19 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Developers",
 ]
-dependencies = [
-    "bitstruct"
-]
+dependencies = ["bitstruct"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+bitstruct_annotated = ["py.typed"]
 
 [project.urls]
 Source = "https://github.com/okleinke/bitstruct-annotated/"
@@ -38,12 +47,12 @@ Source = "https://github.com/okleinke/bitstruct-annotated/"
 dev = [
     "black",
     "build",
-    "coverage",
     "isort",
     "mypy",
+    "pytest",
+    "pytest-cov",
     "pydantic",
     "ruff",
-    "tomli",
     "validate-pyproject[all]",
     "vulture",
 ]
@@ -57,3 +66,8 @@ line-length = 120
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+lint.extend-select = ["E"]
+lint.ignore = []
