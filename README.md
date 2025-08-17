@@ -140,8 +140,3 @@ Quick reference:
 | Nested structure | Annotate field with `ba.Nested()` |
 | Ordering constraint | `order="first" | "last" | "before:field" | "after:field"` |
 | Padding | `ba.PaddingZeros(bits)` / `ba.PaddingOnes(bits)` |
-
-
-## Contributing
-
-Currently, this project does not accept contributions.
