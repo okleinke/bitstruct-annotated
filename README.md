@@ -113,6 +113,35 @@ not make any assumptions about the class' constructor.
 For further information, refer to the docstrings of the functions and metadata
 classes.
 
+## Examples
+
+Runnable example scripts are provided in the `examples/` directory:
+
+* `basic_usage.py`: Minimal dataclass with packing & unpacking.
+* `nesting.py`: Demonstrates nested structures via `Nested()`.
+* `reordering.py`: Shows ordering constraints (`first`, `last`, `before`, `after`).
+* `pydantic_model.py`: Use with a Pydantic `BaseModel`.
+
+Run an example (after editable install):
+
+```bash
+python -m pip install -e .[dev]
+python examples/basic_usage.py
+```
+
+Quick reference:
+
+| Goal | How |
+|------|-----|
+| Generate format string | `ba.format_string(MyCls)` |
+| Get values to pack | `ba.field_values(instance)` |
+| Pack instance | `ba.pack(instance)` |
+| Unpack bytes | `ba.unpack(instance, data)` |
+| Nested structure | Annotate field with `ba.Nested()` |
+| Ordering constraint | `order="first" | "last" | "before:field" | "after:field"` |
+| Padding | `ba.PaddingZeros(bits)` / `ba.PaddingOnes(bits)` |
+
+
 ## Contributing
 
 Currently, this project does not accept contributions.
