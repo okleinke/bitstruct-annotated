@@ -45,24 +45,13 @@ Source = "https://github.com/okleinke/bitstruct-annotated/"
 
 [project.optional-dependencies]
 dev = [
-    "black",
     "build",
-    "isort",
     "mypy",
     "pytest",
     "pytest-cov",
     "pydantic",
     "ruff",
-    "validate-pyproject[all]",
-    "vulture",
 ]
-
-
-[tool.isort]
-profile = "black"
-
-[tool.black]
-line-length = 120
 
 [tool.mypy]
 ignore_missing_imports = true
@@ -71,3 +60,20 @@ ignore_missing_imports = true
 line-length = 120
 lint.extend-select = ["E"]
 lint.ignore = []
+
+[tool.scripts.lint]
+cmd = "ruff check --select=I . && mypy src && ruff format --check ."
+description = "Run linters (ruff, mypy)"
+
+[tool.scripts.format]
+cmd = "ruff format ."
+description = "Auto-format code (ruff)"
+
+[tool.scripts.test]
+cmd = "pytest tests --cov=bitstruct_annotated --cov-report=term-missing"
+description = "Run tests with coverage"
+
+[dependency-groups]
+dev = [
+    "pyproject-scripts",
+]
