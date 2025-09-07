@@ -7,7 +7,7 @@ name = "bitstruct-annotated"
 version = "0.1.3"
 description = "Annotate fields with bitstruct un/packing instructions"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords = [
     "bitstruct",
     "struct",
@@ -22,7 +22,6 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
     "Natural Language :: English",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
