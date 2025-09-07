@@ -4,7 +4,18 @@ from typing import Annotated, Optional
 
 import pydantic
 
-from bitstruct_annotated import *
+import bitstruct_annotated as bsa
+from bitstruct_annotated import (
+    Bool,
+    Float,
+    Nested,
+    PaddingOnes,
+    PaddingZeros,
+    Raw,
+    Signed,
+    Text,
+    Unsigned,
+)
 
 
 class TestFormats(unittest.TestCase):
@@ -55,7 +66,7 @@ class TestDataclassSimple(unittest.TestCase):
         ignored: int = 0
 
     def test_format_string(self):
-        self.assertEqual(">u8s16<f32b8>t40r40p4P4", format_string(self.Example))
+        self.assertEqual(">u8s16<f32b8>t40r40p4P4", bsa.format_string(self.Example))
 
     def test_field_values(self):
         instance = self.Example(
@@ -71,7 +82,7 @@ class TestDataclassSimple(unittest.TestCase):
 
         self.assertEqual(
             (1, -1, 3.14, True, "hello", b"world"),
-            field_values(instance),
+            bsa.field_values(instance),
         )
 
     def test_field_values_with_default(self):
@@ -88,7 +99,7 @@ class TestDataclassSimple(unittest.TestCase):
 
         self.assertEqual(
             (17, -1, 3.14, True, "hello", b"world"),
-            field_values(instance),
+            bsa.field_values(instance),
         )
 
     def test_field_values_with_missing_default(self):
@@ -104,7 +115,7 @@ class TestDataclassSimple(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(ValueError, "Field 'bool' has no value and no default"):
-            field_values(instance)
+            bsa.field_values(instance)
 
     def test_pack(self):
         instance = self.Example(
@@ -118,7 +129,7 @@ class TestDataclassSimple(unittest.TestCase):
             padding_ones=None,
         )
 
-        self.assertEqual(b"\x01\xff\xff\xc3\xaf\x12\x02\x80helloworld\x0f", pack(instance))
+        self.assertEqual(b"\x01\xff\xff\xc3\xaf\x12\x02\x80helloworld\x0f", bsa.pack(instance))
 
     def test_unpack(self):
         data = b"\x01\xff\xff\xc3\xaf\x12\x02\x80helloworld\x0f"
@@ -133,7 +144,7 @@ class TestDataclassSimple(unittest.TestCase):
             padding_ones=None,
         )
 
-        unpack(instance, data)
+        bsa.unpack(instance, data)
 
         self.assertEqual(1, instance.unsigned)
         self.assertEqual(-1, instance.signed)
@@ -151,7 +162,7 @@ class TestDataclassReordering(unittest.TestCase):
         class Example:
             pass
 
-        self.assertEqual("", format_string(Example))
+        self.assertEqual("", bsa.format_string(Example))
 
     def test_invalid_empty_ordering_constraint__fail(self):
         with self.assertRaisesRegex(ValueError, "Invalid ordering constraint: ''"):
@@ -190,7 +201,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Field 'field1' has 'first' constraint but is not the first field",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -203,7 +214,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Field 'field0' has 'last' constraint but is not the last field",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -215,7 +226,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -228,7 +239,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Field 'field1' has 'first' constraint but is not the first field",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -241,7 +252,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Field 'field1' has 'last' constraint but is not the last field",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -254,7 +265,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -268,7 +279,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -282,7 +293,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Field 'field0' has 'before' constraint but the next field is not 'field2'",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -296,7 +307,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Field 'field1' has 'after' constraint but the previous field is not 'field0'",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -309,7 +320,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -323,7 +334,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -337,7 +348,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -351,7 +362,7 @@ class TestDataclassReordering(unittest.TestCase):
         self.assertRaisesRegex(
             ValueError,
             "Could not satisfy constraints of fields",
-            format_string,
+            bsa.format_string,
             Example,
         )
 
@@ -364,7 +375,7 @@ class TestDataclassReordering(unittest.TestCase):
             field3: Annotated[None, Bool(1, order="after:field1")]
             field4: Annotated[None, Bool(1, order="before:field0")]
 
-        self.assertEqual(">b1b1<b1>b1b1", format_string(Example))
+        self.assertEqual(">b1b1<b1>b1b1", bsa.format_string(Example))
 
 
 class TestDataclassInheritance(unittest.TestCase):
@@ -377,19 +388,19 @@ class TestDataclassInheritance(unittest.TestCase):
         derived_field: Annotated[bool, Bool(1)]
 
     def test_format_string(self):
-        self.assertEqual(">b1b1", format_string(self.Derived))
+        self.assertEqual(">b1b1", bsa.format_string(self.Derived))
 
     def test_field_values(self):
         instance = self.Derived(base_field=True, derived_field=False)
-        self.assertEqual((True, False), field_values(instance))
+        self.assertEqual((True, False), bsa.field_values(instance))
 
     def test_pack(self):
         instance = self.Derived(base_field=True, derived_field=False)
-        self.assertEqual(b"\x80", pack(instance))
+        self.assertEqual(b"\x80", bsa.pack(instance))
 
     def test_unpack(self):
         instance = self.Derived(base_field=True, derived_field=True)
-        unpack(instance, b"\xC0")
+        bsa.unpack(instance, b"\xc0")
         self.assertEqual(True, instance.base_field)
         self.assertEqual(True, instance.derived_field)
 
@@ -407,7 +418,7 @@ class TestDataclassNesting(unittest.TestCase):
             inner: Annotated[TestDataclassNesting.Inner, Nested()]
             second_outer_field: Annotated[int, Unsigned(16)]
 
-        self.assertEqual(">u12u4u8u16", format_string(Outer))
+        self.assertEqual(">u12u4u8u16", bsa.format_string(Outer))
 
     def test_field_values(self):
         @dataclass
@@ -417,7 +428,7 @@ class TestDataclassNesting(unittest.TestCase):
             second_outer_field: Annotated[int, Unsigned(16)]
 
         instance = Outer(1, self.Inner(2, 3), 4)
-        self.assertEqual((1, 2, 3, 4), field_values(instance))
+        self.assertEqual((1, 2, 3, 4), bsa.field_values(instance))
 
     def test_pack(self):
         @dataclass
@@ -427,7 +438,7 @@ class TestDataclassNesting(unittest.TestCase):
             second_outer_field: Annotated[int, Unsigned(16)]
 
         instance = Outer(1, self.Inner(2, 3), 4)
-        self.assertEqual(b"\x00\x12\x03\x00\x04", pack(instance))
+        self.assertEqual(b"\x00\x12\x03\x00\x04", bsa.pack(instance))
 
     def test_unpack(self):
         @dataclass
@@ -437,7 +448,7 @@ class TestDataclassNesting(unittest.TestCase):
             second_outer_field: Annotated[int, Unsigned(16)]
 
         instance = Outer(0, self.Inner(0, 0), 0)
-        unpack(instance, b"\x00\x12\x03\x00\x04")
+        bsa.unpack(instance, b"\x00\x12\x03\x00\x04")
         self.assertEqual(1, instance.first_outer_field)
         self.assertEqual(2, instance.inner.first_inner_field)
         self.assertEqual(3, instance.inner.second_inner_field)
@@ -462,7 +473,7 @@ class TestDataclassDoubleNesting(unittest.TestCase):
             inner: Annotated[Inner, Nested()]
             second_outer_field: Annotated[int, Unsigned(24)]
 
-        self.assertEqual(">u20u8u4u16u24", format_string(Outer))
+        self.assertEqual(">u20u8u4u16u24", bsa.format_string(Outer))
 
     def test_field_values(self):
         @dataclass
@@ -478,7 +489,7 @@ class TestDataclassDoubleNesting(unittest.TestCase):
             second_outer_field: Annotated[int, Unsigned(24)]
 
         instance = Outer(1, Inner(2, TestDataclassDoubleNesting.Innermost(3), 4), 5)
-        self.assertEqual((1, 2, 3, 4, 5), field_values(instance))
+        self.assertEqual((1, 2, 3, 4, 5), bsa.field_values(instance))
 
     def test_pack(self):
         @dataclass
@@ -494,7 +505,7 @@ class TestDataclassDoubleNesting(unittest.TestCase):
             second_outer_field: Annotated[int, Unsigned(24)]
 
         instance = Outer(1, Inner(2, TestDataclassDoubleNesting.Innermost(3), 4), 5)
-        self.assertEqual(b"\x00\x00\x10\x23\x00\x04\x00\x00\x05", pack(instance))
+        self.assertEqual(b"\x00\x00\x10\x23\x00\x04\x00\x00\x05", bsa.pack(instance))
 
     def test_unpack(self):
         @dataclass
@@ -510,7 +521,7 @@ class TestDataclassDoubleNesting(unittest.TestCase):
             second_outer_field: Annotated[int, Unsigned(24)]
 
         instance = Outer(0, Inner(0, TestDataclassDoubleNesting.Innermost(0), 0), 0)
-        unpack(instance, b"\x00\x00\x10\x23\x00\x04\x00\x00\x05")
+        bsa.unpack(instance, b"\x00\x00\x10\x23\x00\x04\x00\x00\x05")
         self.assertEqual(1, instance.first_outer_field)
         self.assertEqual(2, instance.inner.first_inner_field)
         self.assertEqual(3, instance.inner.innermost.innermost_field)
@@ -557,7 +568,7 @@ class TestDataclassComplex(unittest.TestCase):
     def test_format_string(self):
         self.assertEqual(
             ">u8t32t32u8r32u16p4",
-            format_string(self.instance),
+            bsa.format_string(self.instance),
         )
 
     def test_field_values(self):
@@ -570,13 +581,13 @@ class TestDataclassComplex(unittest.TestCase):
                 b"test",
                 0x1234,
             ),
-            field_values(self.instance),
+            bsa.field_values(self.instance),
         )
 
     def test_pack(self):
         self.assertEqual(
             b"\x01DestSrc \x05test\x12\x34\x00",
-            pack(self.instance),
+            bsa.pack(self.instance),
         )
 
     def test_unpack(self):
@@ -592,7 +603,7 @@ class TestDataclassComplex(unittest.TestCase):
             footer=ComplexExample.Footer(checksum=0, padding=None),
         )
 
-        unpack(instance, b"\x01DestSrc \x05test\x12\x34\x00")
+        bsa.unpack(instance, b"\x01DestSrc \x05test\x12\x34\x00")
 
         self.assertEqual(1, instance.header.packet_id)
         self.assertEqual("Dest", instance.header.destination_name)
@@ -620,7 +631,7 @@ class TestPydantic(unittest.TestCase):
     def test_format_string(self):
         self.assertEqual(
             ">t32t32u16",
-            format_string(self.instance),
+            bsa.format_string(self.instance),
         )
 
     def test_field_values(self):
@@ -630,13 +641,13 @@ class TestPydantic(unittest.TestCase):
                 "Coro",
                 2021,
             ),
-            field_values(self.instance),
+            bsa.field_values(self.instance),
         )
 
     def test_pack(self):
         self.assertEqual(
             b"ToyoCoro\x07\xe5",
-            pack(self.instance),
+            bsa.pack(self.instance),
         )
 
     def test_unpack(self):
@@ -646,7 +657,7 @@ class TestPydantic(unittest.TestCase):
             car_year=1900,
         )
 
-        unpack(instance, b"ToyoCoro\x07\xe5")
+        bsa.unpack(instance, b"ToyoCoro\x07\xe5")
 
         self.assertEqual("Toyo", instance.car_make)
         self.assertEqual("Coro", instance.car_model)
