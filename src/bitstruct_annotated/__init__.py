@@ -121,9 +121,9 @@ class PackMetadata(abc.ABC):
         :param value: The value to write to the field.
         """
 
-        assert (
-            self._object is not None and self._field is not None
-        ), "Metadata must be attached to an object to write field value"
+        assert self._object is not None and self._field is not None, (
+            "Metadata must be attached to an object to write field value"
+        )
 
         setattr(self._object, self._field, value)
 

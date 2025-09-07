@@ -1,7 +1,10 @@
 """Demonstrate ordering constraints (first/last/before/after)."""
+
 from dataclasses import dataclass
 from typing import Annotated
+
 import bitstruct_annotated as ba
+
 
 @dataclass
 class Ordered:
@@ -15,5 +18,6 @@ class Ordered:
     mid: Annotated[int, ba.Unsigned(16, order="before:tail")]
     # Last field
     tail: Annotated[int, ba.Unsigned(8, order="last")]
+
 
 print("Format:", ba.format_string(Ordered))

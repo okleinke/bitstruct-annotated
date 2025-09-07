@@ -1,7 +1,10 @@
 """Basic usage: define a dataclass with Annotated fields and pack/unpack it."""
+
 from dataclasses import dataclass
 from typing import Annotated
+
 import bitstruct_annotated as ba
+
 
 @dataclass
 class Packet:
@@ -13,6 +16,7 @@ class Packet:
     _pad: Annotated[None, ba.PaddingZeros(7)]
     # 16-bit unsigned value
     value: Annotated[int, ba.Unsigned(16)]
+
 
 p = Packet(1, True, None, 513)
 raw = ba.pack(p)
