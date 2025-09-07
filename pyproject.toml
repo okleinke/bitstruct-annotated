@@ -30,6 +30,18 @@ classifiers = [
 ]
 dependencies = ["bitstruct"]
 
+[project.optional-dependencies]
+dev = [
+    "build",
+    "mypy",
+    "pydantic",
+    "pyproject-scripts",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+]
+
+
 [tool.setuptools]
 include-package-data = true
 
@@ -42,15 +54,6 @@ bitstruct_annotated = ["py.typed"]
 [project.urls]
 Source = "https://github.com/okleinke/bitstruct-annotated/"
 
-[project.optional-dependencies]
-dev = [
-    "build",
-    "mypy",
-    "pytest",
-    "pytest-cov",
-    "pydantic",
-    "ruff",
-]
 
 [tool.mypy]
 ignore_missing_imports = true
@@ -71,8 +74,3 @@ description = "Auto-format code (ruff)"
 [tool.scripts.test]
 cmd = "pytest tests --cov=bitstruct_annotated --cov-report=term-missing"
 description = "Run tests with coverage"
-
-[dependency-groups]
-dev = [
-    "pyproject-scripts",
-]
