@@ -64,7 +64,7 @@ lint.extend-select = ["E"]
 lint.ignore = []
 
 [tool.scripts.lint]
-cmd = "ruff check --select=I . && mypy src && ruff format --check ."
+cmd = "ruff check . && mypy src && ruff format --check ."
 description = "Run linters (ruff, mypy)"
 
 [tool.scripts.format]
